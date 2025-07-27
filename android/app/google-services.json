@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1097351485542",
+    "project_id": "jspm-connect",
+    "storage_bucket": "jspm-connect.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1097351485542:android:a7a9d5ebc1bdd31616b5a7",
+        "android_client_info": {
+          "package_name": "com.example.jspm_connect"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAArRbqIpKBsImyI78QIr3LwisBSZI99R8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
