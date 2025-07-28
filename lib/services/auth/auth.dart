@@ -27,4 +27,12 @@ class Auth {
       rethrow;
     }
   }
+
+  Future<void> logOut() async {
+    try {
+      await auth.signOut();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

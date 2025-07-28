@@ -35,7 +35,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         ).showSnackBar(SnackBar(content: Text("You can login now!")));
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LogInScreen()),
+          MaterialPageRoute(builder: (context) => LogInScreen(true)),
         );
       }
     } catch (e) {
@@ -121,7 +121,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LogInScreen()),
+                        MaterialPageRoute(
+                          builder: (context) => LogInScreen(false),
+                        ),
                       );
                     },
                     child: Text(

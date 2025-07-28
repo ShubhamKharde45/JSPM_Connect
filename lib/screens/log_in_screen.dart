@@ -2,13 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jspm_connect/screens/main_screen.dart';
+import 'package:jspm_connect/screens/role_selection_screen.dart';
 import 'package:jspm_connect/screens/sign_up_screen.dart';
 import 'package:jspm_connect/services/auth/auth.dart';
 import 'package:jspm_connect/utils/app_btn.dart';
 import 'package:jspm_connect/utils/app_input_field.dart';
 
 class LogInScreen extends ConsumerStatefulWidget {
-  const LogInScreen({super.key});
+  const LogInScreen(this.isNewAccount, {super.key});
+
+  final bool isNewAccount;
 
   @override
   ConsumerState<LogInScreen> createState() => _LogInScreenState();
@@ -77,7 +80,14 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                     );
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (context) => MainScreen()),
+                      MaterialPageRoute(
+                        builder: (context) {
+                          if (widget.isNewAccount) {
+                            return RoleSelectionScreen();
+                          }
+                          return MainScreen();
+                        },
+                      ),
                       (route) => false,
                     );
                   } catch (e) {

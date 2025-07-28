@@ -17,14 +17,16 @@ class AuthScreen extends ConsumerWidget {
         }
 
         if (snapshot.hasError) {
-          return Center(child: Text('Something went wrong:\n${snapshot.error}'));
+          return Center(
+            child: Text('Something went wrong:\n${snapshot.error}'),
+          );
         }
 
         if (snapshot.hasData) {
           return const MainScreen();
         }
 
-        return const LogInScreen();
+        return const LogInScreen(false);
       },
     );
   }

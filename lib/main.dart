@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:jspm_connect/screens/form_screen.dart';
 import 'package:jspm_connect/services/auth/auth_screen.dart';
 import 'package:jspm_connect/theme/theme_notifier.dart';
 
@@ -20,7 +19,7 @@ class JspmConnect extends ConsumerWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme,
-      home: FormScreen(),
+      home: AuthScreen(),
     );
   }
 }
