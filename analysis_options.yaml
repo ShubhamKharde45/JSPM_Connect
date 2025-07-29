@@ -12,6 +12,7 @@ analyzer:
     prefer_final_fields: ignore
     override_on_non_overriding_member: ignore
     unused_local_variable: ignore
+    must_be_immutable: ignore
 include: package:flutter_lints/flutter.yaml
 
 linter:

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jspm_connect/screens/form_screen.dart';
+import 'package:jspm_connect/screens/FormScreens/faculty_form_screen.dart';
+import 'package:jspm_connect/screens/FormScreens/member_form_screen.dart';
+import 'package:jspm_connect/screens/FormScreens/student_form_screen.dart';
 
 class RoleSelectionScreen extends StatefulWidget {
   const RoleSelectionScreen({super.key});
@@ -9,7 +11,7 @@ class RoleSelectionScreen extends StatefulWidget {
 }
 
 class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
-  List<String> roles = ["Student", "Faculty", "HOD"];
+  List<String> roles = ["Student", "Faculty", "Member"];
   String selectedRole = "Student";
 
   @override
@@ -26,11 +28,26 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
             setState(() {
               selectedRole = value!;
             });
+            if (selectedRole == "Student") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => StudentFormScreen()),
+              );
+            }
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => FormScreen(selectedRole)),
-            );
+            if (selectedRole == "Faculty") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => FacultyFormScreen()),
+              );
+            }
+
+            if (selectedRole == "Member") {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MemberFormScreen()),
+              );
+            }
           },
         ),
       ),

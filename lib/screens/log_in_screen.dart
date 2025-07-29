@@ -1,3 +1,4 @@
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -84,7 +85,7 @@ class _LogInScreenState extends ConsumerState<LogInScreen> {
                         builder: (context) {
                           if (widget.isNewAccount) {
                             return RoleSelectionScreen();
-                          }
+                          } 
                           return MainScreen();
                         },
                       ),

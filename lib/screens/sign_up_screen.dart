@@ -30,6 +30,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           emailController.text.trim(),
           passController.text.trim(),
         );
+        
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text("You can login now!")));
