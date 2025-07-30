@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:jspm_connect/models/faculty_model.dart';
 import 'package:jspm_connect/models/member_model.dart';
+
 import 'package:jspm_connect/models/student_model.dart';
 
 class Database {
@@ -40,4 +41,6 @@ class Database {
       rethrow;
     }
   }
+
+  // NOTICE
 }

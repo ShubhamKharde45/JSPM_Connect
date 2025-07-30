@@ -6,6 +6,9 @@ final themeProvider = StateNotifierProvider<ThemeNotifier, ThemeData>(
   (ref) => ThemeNotifier(),
 );
 
+
+
+
 class ThemeNotifier extends StateNotifier<ThemeData> {
   ThemeNotifier() : super(darkMode);
 

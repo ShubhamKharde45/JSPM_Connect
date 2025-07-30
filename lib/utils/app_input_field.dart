@@ -4,14 +4,14 @@ class AppInputField extends StatelessWidget {
   const AppInputField({
     super.key,
     required this.hint,
-    required this.icon,
+    this.icon,
     required this.obscureText,
     this.controller,
     this.width,
-    this.height
+    this.height,
   });
   final String hint;
-  final IconData icon;
+  final IconData? icon;
   final bool obscureText;
   final TextEditingController? controller;
   final double? height;
@@ -20,7 +20,7 @@ class AppInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height ?? 65,
+      height: height,
       width: width ?? MediaQuery.of(context).size.width * 0.9,
       decoration: BoxDecoration(),
       child: TextField(
@@ -31,6 +31,7 @@ class AppInputField extends StatelessWidget {
         cursorColor: Theme.of(context).colorScheme.inversePrimary,
         decoration: InputDecoration(
           hintText: hint,
+
           contentPadding: EdgeInsets.symmetric(vertical: 20),
           hintStyle: TextStyle(
             color: Theme.of(
