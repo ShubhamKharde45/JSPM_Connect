@@ -23,6 +23,7 @@ class AuthScreen extends ConsumerWidget {
         }
 
         if (snapshot.hasData) {
+          
           return const MainScreen();
         }
 

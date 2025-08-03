@@ -7,6 +7,7 @@ import 'package:jspm_connect/theme/theme_notifier.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(ProviderScope(child: const JspmConnect()));
 }
 

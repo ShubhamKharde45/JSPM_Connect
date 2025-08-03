@@ -15,6 +15,12 @@ class Database {
           .collection('Students')
           .doc(auth.currentUser!.uid)
           .set(student.toMap());
+
+      await firestore.collection('Users').doc(auth.currentUser!.uid).set({
+        'role': 'Students',
+        'isVarified': false,
+        'isFormField': false,
+      });
     } catch (e) {
       rethrow;
     }
@@ -26,6 +32,11 @@ class Database {
           .collection('Faculty')
           .doc(auth.currentUser!.uid)
           .set(faculty.toMap());
+      await firestore.collection('Users').doc(auth.currentUser!.uid).set({
+        'role': 'Faculty',
+        'isVarified': false,
+        'isFormField': false,
+      });
     } catch (e) {
       rethrow;
     }
@@ -37,6 +48,11 @@ class Database {
           .collection('Member')
           .doc(auth.currentUser!.uid)
           .set(member.toMap());
+      await firestore.collection('Users').doc(auth.currentUser!.uid).set({
+        'role': 'Members',
+        'isVarified': false,
+        'isFormField': false,
+      });
     } catch (e) {
       rethrow;
     }

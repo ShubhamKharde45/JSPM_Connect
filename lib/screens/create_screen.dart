@@ -37,7 +37,6 @@ class _CreateScreenState extends State<CreateScreen> {
   String? selectNoticeType;
   String? selectCategoryType;
 
-  DateTime? selectedDateTime = DateTime.now();
 
   void setNotice() async {
     try {
@@ -47,9 +46,10 @@ class _CreateScreenState extends State<CreateScreen> {
         title: titleController.text,
         description: descController.text,
         type: selectNoticeType!,
-        dateTime: selectedDateTime!,
+        dateTime: DateTime.now().microsecondsSinceEpoch,
         createdBy: FirebaseAuth.instance.currentUser!.uid,
         visibleTo: [selectCategoryType!],
+        
       );
       await docRef.set(notice.toMap());
       ScaffoldMessenger.of(

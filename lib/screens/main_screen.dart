@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jspm_connect/screens/create_screen.dart';
 import 'package:jspm_connect/screens/home_screen.dart';
+import 'package:jspm_connect/screens/notification_screen.dart';
 import 'package:jspm_connect/screens/profile_screen.dart';
+import 'package:jspm_connect/services/auth/user_role_provider.dart';
 import 'package:jspm_connect/utils/app_bottom_bar.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
@@ -16,10 +18,21 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   final List<Widget> pages = [
     HomeScreen(),
     CreateScreen(),
-    ProfileScreen(),
+    NotificationScreen(),
     ProfileScreen(),
   ];
   int index = 0;
+
+  void initialize() async {
+    await initializeUserRole(ref);
+  }
+
+  @override
+  void initState() {
+    initialize();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -6,8 +6,6 @@ import 'package:jspm_connect/services/auth/user_role_provider.dart';
 final noticesProvider = StreamProvider<List<Notice>>((ref) {
   final role = ref.watch(userRoleProvider);
 
-  if (role == null) return const Stream.empty();
-
   final query = FirebaseFirestore.instance
       .collection('Notices')
       .where('visibleTo', arrayContains: "Student")

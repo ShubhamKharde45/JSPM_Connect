@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class Notice {
   final String id;
   final String title;
   final String description;
   final String type;
-  final DateTime dateTime;
+  final int dateTime;
   final String createdBy;
   final List<String> visibleTo; // ['Student', 'Faculty'] etc.
   final String? attachmentUrl;
@@ -21,20 +19,18 @@ class Notice {
     this.attachmentUrl,
   });
 
-
   factory Notice.fromMap(Map<String, dynamic> map, String docId) {
     return Notice(
       id: docId,
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       type: map['type'] ?? '',
-      dateTime: (map['dateTime'] as Timestamp).toDate(),
+      dateTime: (map['dateTime']),
       createdBy: map['createdBy'] ?? '',
       visibleTo: List<String>.from(map['visibleTo'] ?? []),
       attachmentUrl: map['attachmentUrl'],
     );
   }
-
 
   Map<String, dynamic> toMap() {
     return {

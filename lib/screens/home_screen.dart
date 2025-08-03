@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jspm_connect/services/auth/user_role_provider.dart';
 import 'package:jspm_connect/utils/app_container.dart';
+import 'package:jspm_connect/utils/notice_card.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -11,8 +13,17 @@ class HomeScreen extends ConsumerStatefulWidget {
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  String userRole = "";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    userRole = ref.watch(userRoleProvider);
+    print(userRole);
     return Scaffold(
       appBar: AppBar(
         title: Text("JSPM Notice Board"),
@@ -38,15 +49,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     prefixIcon: Icon(Icons.search),
                     fillColor: Theme.of(context).colorScheme.primary,
                     filled: true,
-                    disabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide.none,
-                    ),
+                    border: InputBorder.none,
                   ),
                 ),
               ),
@@ -54,121 +57,150 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 height: 50,
                 width: MediaQuery.of(context).size.width * 0.15,
                 padding: EdgeInsets.only(right: 10),
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                color: Theme.of(context).colorScheme.primary,
                 child: Icon(Icons.sort),
               ),
             ],
           ),
           SizedBox(height: 20),
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("Notices")
-                .where('visibleTo', arrayContains: "Student")
-                .orderBy('dateTime', descending: false)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("Notices")
+                  .where('visibleTo', arrayContains: userRole)
+                  .orderBy('dateTime', descending: true)
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(child: CircularProgressIndicator());
+                }
 
-              if (!snapshot.hasData || snapshot.hasError) {
-                return Text("Error");
-              }
-              final docs = snapshot.data!.docs;
-              return Expanded(
-                child: ListView.builder(
+                if (!snapshot.hasData ||
+                    snapshot.hasError ||
+                    snapshot.data!.docs.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "No notices",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                      ),
+                    ),
+                  );
+                }
+
+                final docs = snapshot.data!.docs;
+
+                return ListView.builder(
                   itemCount: docs.length,
                   itemBuilder: (context, index) {
                     final data = docs[index].data() as Map<String, dynamic>;
-                    return AppContainer(
-                      width: MediaQuery.of(context).size.width * 0.9,
-                      padding: EdgeInsets.symmetric(
-                        vertical: 20,
-                        horizontal: 10,
-                      ),
-
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 10,
-                                  horizontal: 5,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.amber.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Text(data['type']),
+                    return GestureDetector(
+                      onTap: () {
+                        showBottomSheet(
+                          elevation: 0,
+                          enableDrag: true,
+                          context: context,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.primary,
+                          builder: (context) => AppContainer(
+                            height: MediaQuery.of(context).size.height,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 20,
+                                horizontal: 10,
                               ),
-                              Icon(
-                                Icons.book,
-                                color: Colors.red.withOpacity(0.3),
-                                size: 25,
+                              child: SingleChildScrollView(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                        vertical: 10,
+                                        horizontal: 5,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.amber.withOpacity(0.3),
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      child: Text(data['type']),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      data['title'],
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.inversePrimary,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      data['description'],
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.inversePrimary,
+                                      ),
+                                    ),
+                                    SizedBox(height: 30),
+                                    Text(
+                                      data.containsKey('attachmentUrl')
+                                          ? data['attachmentUrl']
+                                          : "#No attachment",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.inversePrimary,
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.calendar_month, size: 20),
+                                        SizedBox(width: 5),
+                                        // Text(
+                                        //   DateTime.fromMicrosecondsSinceEpoch(
+                                        //     data['dateTime'],
+                                        //   ).toLocal().toString(),
+                                        //   style: TextStyle(
+                                        //     fontSize: 15,
+                                        //     color: Theme.of(
+                                        //       context,
+                                        //     ).colorScheme.inversePrimary,
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 40),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Icon(Icons.thumb_up_alt_outlined),
+                                        SizedBox(width: 20),
+                                        Icon(Icons.thumb_down_alt_outlined),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ],
+                            ),
                           ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Text(
-                                data['title'],
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.inversePrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 10),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  data['description'],
-                                  style: TextStyle(
-                                    fontSize: 15,
-
-                                    color: Theme.of(
-                                      context,
-                                    ).colorScheme.inversePrimary,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: 15),
-                          Row(
-                            children: [
-                              Icon(Icons.calendar_month, size: 20),
-                              SizedBox(width: 5),
-                              Text(
-                                data['dateTime'].toDate().toString(),
-                                style: TextStyle(
-                                  fontSize: 15,
-
-                                  color: Theme.of(
-                                    context,
-                                  ).colorScheme.inversePrimary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                        );
+                      },
+                      child: NoticeCard(data: data),
                     );
                   },
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
         ],
       ),
