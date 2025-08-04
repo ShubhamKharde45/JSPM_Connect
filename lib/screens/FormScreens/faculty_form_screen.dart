@@ -51,6 +51,7 @@ class _FacultyFormScreenState extends State<FacultyFormScreen> {
 
       Database db = Database();
       await db.initializeFaculty(faculty);
+      await db.updateFormFillStatus(true);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Send approval request")));

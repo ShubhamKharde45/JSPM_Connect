@@ -38,6 +38,7 @@ class _MemberFormScreenState extends State<MemberFormScreen> {
         uid: FirebaseAuth.instance.currentUser!.uid,
         name: nameController.text,
         email: FirebaseAuth.instance.currentUser!.email!,
+        role: "Member",
         designation: designationController.text,
         department: departmentController.text,
         photoUrl: picUrlController.text,
@@ -45,6 +46,7 @@ class _MemberFormScreenState extends State<MemberFormScreen> {
       );
       Database db = Database();
       await db.initializeMembers(member);
+      await db.updateFormFillStatus(true);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text("Send approval request")));

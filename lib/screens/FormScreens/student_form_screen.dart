@@ -47,6 +47,8 @@ class _StudentFormScreenState extends State<StudentFormScreen> {
       );
       Database db = Database();
       await db.initializeStudent(student);
+      await db.updateFormFillStatus(true);
+
       
       ScaffoldMessenger.of(
         context,

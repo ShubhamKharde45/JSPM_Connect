@@ -23,7 +23,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     userRole = ref.watch(userRoleProvider);
-    print(userRole);
     return Scaffold(
       appBar: AppBar(
         title: Text("JSPM Notice Board"),
@@ -101,13 +100,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         showBottomSheet(
                           elevation: 0,
                           enableDrag: true,
+                          showDragHandle: true,
                           context: context,
                           backgroundColor: Theme.of(
                             context,
                           ).colorScheme.primary,
                           builder: (context) => AppContainer(
-                            height: MediaQuery.of(context).size.height,
+                            height: MediaQuery.of(context).size.height * 0.8,
                             width: MediaQuery.of(context).size.width * 0.9,
+
+                            // color: Theme.of(context).colorScheme.secondary,
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
                                 vertical: 20,
@@ -150,33 +152,33 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 30),
-                                    Text(
-                                      data.containsKey('attachmentUrl')
-                                          ? data['attachmentUrl']
-                                          : "#No attachment",
-                                      style: TextStyle(
-                                        fontSize: 15,
-                                        color: Theme.of(
-                                          context,
-                                        ).colorScheme.inversePrimary,
-                                      ),
-                                    ),
+                                    // Text(
+                                    //   data.containsKey('attachmentUrl') != null
+                                    //       ? data['attachmentUrl']
+                                    //       "#No attachment",
+                                    //   style: TextStyle(
+                                    //     fontSize: 15,
+                                    //     color: Theme.of(
+                                    //       context,
+                                    //     ).colorScheme.inversePrimary,
+                                    //   ),
+                                    // ),
                                     SizedBox(height: 10),
                                     Row(
                                       children: [
                                         Icon(Icons.calendar_month, size: 20),
                                         SizedBox(width: 5),
-                                        // Text(
-                                        //   DateTime.fromMicrosecondsSinceEpoch(
-                                        //     data['dateTime'],
-                                        //   ).toLocal().toString(),
-                                        //   style: TextStyle(
-                                        //     fontSize: 15,
-                                        //     color: Theme.of(
-                                        //       context,
-                                        //     ).colorScheme.inversePrimary,
-                                        //   ),
-                                        // ),
+                                        Text(
+                                          DateTime.fromMicrosecondsSinceEpoch(
+                                            data['dateTime'],
+                                          ).toLocal().toString(),
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Theme.of(
+                                              context,
+                                            ).colorScheme.inversePrimary,
+                                          ),
+                                        ),
                                       ],
                                     ),
                                     SizedBox(height: 40),

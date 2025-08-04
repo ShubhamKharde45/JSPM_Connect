@@ -32,11 +32,10 @@ class _CreateScreenState extends State<CreateScreen> {
     'General Announcement',
   ];
 
-  List<String> categories = ["All", "Students", "Faculty", "Members"];
+  List<String> categories = ["All", "Student", "Faculty", "Member"];
 
   String? selectNoticeType;
   String? selectCategoryType;
-
 
   void setNotice() async {
     try {
@@ -49,7 +48,6 @@ class _CreateScreenState extends State<CreateScreen> {
         dateTime: DateTime.now().microsecondsSinceEpoch,
         createdBy: FirebaseAuth.instance.currentUser!.uid,
         visibleTo: [selectCategoryType!],
-        
       );
       await docRef.set(notice.toMap());
       ScaffoldMessenger.of(

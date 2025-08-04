@@ -6,12 +6,13 @@ class AppContainer extends StatelessWidget {
     this.height,
     this.width,
     this.child,
-    this.padding,
+    this.padding, this.color,
   });
   final double? height;
   final double? width;
   final EdgeInsetsGeometry? padding;
   final Widget? child;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class AppContainer extends StatelessWidget {
       padding: padding ?? EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
+        color: color ??Theme.of(context).colorScheme.primary,
         borderRadius: BorderRadius.circular(20),
       ),
       child: child,

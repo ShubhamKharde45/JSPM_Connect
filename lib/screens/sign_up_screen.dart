@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,7 +19,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
-
+  List<String> roles = ["Student", "Faculty", "Member"];
+  String selectedRole = "Student";
   void createAccount() async {
     Auth auth = Auth();
     try {
@@ -30,13 +33,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           emailController.text.trim(),
           passController.text.trim(),
         );
-        
+        await FirebaseFirestore.instance
+            .collection("Users")
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .set({
+              'role' : selectedRole,
+              'isVarified': false, 'isFormField': false});
+
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text("You can login now!")));
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => LogInScreen(true)),
+          MaterialPageRoute(builder: (context) => LogInScreen()),
         );
       }
     } catch (e) {
@@ -98,6 +107,21 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 obscureText: true,
                 controller: confirmPassController,
               ),
+              SizedBox(height: 10),
+              DropdownButton<String>(
+                value: selectedRole,
+                items: roles
+                    .map(
+                      (role) =>
+                          DropdownMenuItem(value: role, child: Text(role)),
+                    )
+                    .toList(),
+                onChanged: (value) {
+                  setState(() {
+                    selectedRole = value!;
+                  });
+                },
+              ),
               SizedBox(height: 20),
               AppBtn(
                 onTap: () => createAccount(),
@@ -122,9 +146,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) => LogInScreen(false),
-                        ),
+                        MaterialPageRoute(builder: (context) => LogInScreen()),
                       );
                     },
                     child: Text(

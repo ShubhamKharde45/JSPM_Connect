@@ -17,7 +17,7 @@ class Database {
           .set(student.toMap());
 
       await firestore.collection('Users').doc(auth.currentUser!.uid).set({
-        'role': 'Students',
+        'role': 'Student',
         'isVarified': false,
         'isFormField': false,
       });
@@ -49,9 +49,19 @@ class Database {
           .doc(auth.currentUser!.uid)
           .set(member.toMap());
       await firestore.collection('Users').doc(auth.currentUser!.uid).set({
-        'role': 'Members',
+        'role': 'Member',
         'isVarified': false,
         'isFormField': false,
+      });
+    } catch (e) {
+      rethrow;
+    }
+  }
+ 
+  Future<void> updateFormFillStatus(bool isFormField) async {
+    try {
+      await firestore.collection('Users').doc(auth.currentUser!.uid).update({
+        'isFormField': isFormField,
       });
     } catch (e) {
       rethrow;
