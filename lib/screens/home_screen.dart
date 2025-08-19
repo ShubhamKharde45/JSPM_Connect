@@ -66,7 +66,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("Notices")
-                  .where('visibleTo', arrayContains: userRole)
+                  .where('visibleTo', arrayContainsAny: [userRole, "All"])
                   .orderBy('dateTime', descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
@@ -90,11 +90,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 }
 
                 final docs = snapshot.data!.docs;
-
                 return ListView.builder(
                   itemCount: docs.length,
                   itemBuilder: (context, index) {
                     final data = docs[index].data() as Map<String, dynamic>;
+
                     return GestureDetector(
                       onTap: () {
                         showBottomSheet(
@@ -119,16 +119,48 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                        vertical: 10,
-                                        horizontal: 5,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: Colors.amber.withOpacity(0.3),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child: Text(data['type']),
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: 40,
+                                          width: 40,
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 10,
+                                            horizontal: 5,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: NetworkImage(
+                                                data["profileUrl"],
+                                              ),
+                                              fit: BoxFit.cover,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              100,
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            left: 10,
+                                          ),
+                                          child: Text(
+                                            data['creatorName'],
+                                            style: TextStyle(
+                                              color: Theme.of(
+                                                context,
+                                              ).colorScheme.inversePrimary,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                     SizedBox(height: 10),
                                     Text(
@@ -152,17 +184,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       ),
                                     ),
                                     SizedBox(height: 30),
-                                    // Text(
-                                    //   data.containsKey('attachmentUrl') != null
-                                    //       ? data['attachmentUrl']
-                                    //       "#No attachment",
-                                    //   style: TextStyle(
-                                    //     fontSize: 15,
-                                    //     color: Theme.of(
-                                    //       context,
-                                    //     ).colorScheme.inversePrimary,
-                                    //   ),
-                                    // ),
+                                    Text(
+                                      data['attachmentUrl'] ?? "No attachment",
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        color: Theme.of(
+                                          context,
+                                        ).colorScheme.inversePrimary,
+                                      ),
+                                    ),
                                     SizedBox(height: 10),
                                     Row(
                                       children: [
@@ -182,14 +212,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       ],
                                     ),
                                     SizedBox(height: 40),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Icon(Icons.thumb_up_alt_outlined),
-                                        SizedBox(width: 20),
-                                        Icon(Icons.thumb_down_alt_outlined),
-                                      ],
-                                    ),
                                   ],
                                 ),
                               ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:jspm_connect/models/notice_model.dart';
+import 'package:jspm_connect/services/database/database.dart';
 import 'package:jspm_connect/utils/app_btn.dart';
 import 'package:jspm_connect/utils/app_container.dart';
 import 'package:jspm_connect/utils/app_input_field.dart';
@@ -16,6 +17,8 @@ class CreateScreen extends StatefulWidget {
 class _CreateScreenState extends State<CreateScreen> {
   TextEditingController titleController = TextEditingController();
   TextEditingController descController = TextEditingController();
+  TextEditingController attachmentController = TextEditingController();
+  TextEditingController priorityController = TextEditingController();
 
   List<String> noticeTypes = [
     'Exam Schedule',
@@ -48,6 +51,14 @@ class _CreateScreenState extends State<CreateScreen> {
         dateTime: DateTime.now().microsecondsSinceEpoch,
         createdBy: FirebaseAuth.instance.currentUser!.uid,
         visibleTo: [selectCategoryType!],
+        profileUrl: await Database().getUserProfilePicByUID(
+          FirebaseAuth.instance.currentUser!.uid,
+        ),
+        creatorName: await Database().getUserNameByUID(
+          FirebaseAuth.instance.currentUser!.uid,
+        ),
+        attachmentUrl: attachmentController.text,
+        priority: int.parse(priorityController.text),
       );
       await docRef.set(notice.toMap());
       ScaffoldMessenger.of(
@@ -62,6 +73,7 @@ class _CreateScreenState extends State<CreateScreen> {
 
   @override
   Widget build(BuildContext context) {
+    selectNoticeType = noticeTypes[0];
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -77,7 +89,7 @@ class _CreateScreenState extends State<CreateScreen> {
                     .map((e) => DropdownMenuEntry(value: e, label: e))
                     .toList(),
                 onSelected: (value) => setState(() {
-                  selectNoticeType = value;
+                  selectNoticeType = value!;
                 }),
 
                 inputDecorationTheme: const InputDecorationTheme(
@@ -132,10 +144,24 @@ class _CreateScreenState extends State<CreateScreen> {
               ),
             ),
 
+            SizedBox(height: 10),
             AppContainer(
-              height: 200,
               width: MediaQuery.of(context).size.width * 0.9,
-              child: Center(child: Text("Select attachment")),
+              child: AppInputField(
+                hint: "Enter attachment url",
+                obscureText: false,
+                controller: attachmentController,
+              ),
+            ),
+
+            SizedBox(height: 10),
+            AppContainer(
+              width: MediaQuery.of(context).size.width * 0.9,
+              child: AppInputField(
+                hint: "set priority (1-3)",
+                obscureText: false,
+                controller: priorityController,
+              ),
             ),
             SizedBox(height: 30),
             AppBtn(

@@ -12,17 +12,81 @@ class NoticeCard extends StatelessWidget {
       padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
 
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 40,
+                    width: 40,
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(data["profileUrl"]),
+                        fit: BoxFit.cover,
+                      ),
+                      borderRadius: BorderRadius.circular(100),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Text(
+                      data['creatorName'],
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.inversePrimary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Container(
+                      height: 20,
+                      width: 20,
+                      decoration: BoxDecoration(
+                        color: data['priority'] == 1
+                            ? Colors.red
+                            : data['priority'] == 2
+                            ? Colors.yellow
+                            : data['priority'] == 3
+                            ? Colors.green
+                            : Colors.black,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+                padding: EdgeInsets.symmetric(vertical: 2, horizontal: 10),
                 decoration: BoxDecoration(
-                  color: Colors.amber.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(15),
+                  color: data['priority'] == 1
+                      ? Colors.red.withAlpha(90)
+                      : data['priority'] == 2
+                      ? Colors.yellow.withAlpha(90)
+                      : data['priority'] == 3
+                      ? Colors.green.withAlpha(90)
+                      : Colors.black.withAlpha(90),
+                  borderRadius: BorderRadius.circular(5),
                 ),
-                child: Text(data['type']),
+                child: Center(child: Text(data['type'])),
               ),
             ],
           ),

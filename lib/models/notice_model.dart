@@ -5,8 +5,11 @@ class Notice {
   final String type;
   final int dateTime;
   final String createdBy;
-  final List<String> visibleTo; // ['Student', 'Faculty'] etc.
+  final List<String> visibleTo;
   final String? attachmentUrl;
+  final String? profileUrl;
+  final String? creatorName;
+  final int priority;
 
   Notice({
     required this.id,
@@ -17,6 +20,9 @@ class Notice {
     required this.createdBy,
     required this.visibleTo,
     this.attachmentUrl,
+    this.profileUrl,
+    this.creatorName,
+    required this.priority,
   });
 
   factory Notice.fromMap(Map<String, dynamic> map, String docId) {
@@ -25,10 +31,13 @@ class Notice {
       title: map['title'] ?? '',
       description: map['description'] ?? '',
       type: map['type'] ?? '',
-      dateTime: (map['dateTime']),
+      dateTime: map['dateTime'],
       createdBy: map['createdBy'] ?? '',
       visibleTo: List<String>.from(map['visibleTo'] ?? []),
       attachmentUrl: map['attachmentUrl'],
+      profileUrl: map['profileUrl'],
+      creatorName: map['creatorName'],
+      priority: map['priority'],
     );
   }
 
@@ -41,6 +50,9 @@ class Notice {
       'createdBy': createdBy,
       'visibleTo': visibleTo,
       'attachmentUrl': attachmentUrl,
+      'profileUrl': profileUrl,
+      'creatorName': creatorName,
+      'priority': priority,
     };
   }
 }
